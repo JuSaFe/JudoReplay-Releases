@@ -36,26 +36,29 @@ Sin dependencias externas: solo la biblioteca base de .NET (`HttpClient`, `Clien
 | Componente | Licencia | Cómo se usa |
 |---|---|---|
 | .NET 9 | MIT | Runtime incluido en los paquetes autocontenidos |
-| **FFmpeg** 8.1.3 | **LGPL 2.1 o posterior** | Graba con el **ejecutable** `ffmpeg`, que JudoReplay lanza como proceso hijo, y reproduce con las **bibliotecas compartidas** (avcodec, avformat, avutil, swscale, swresample), cargadas en tiempo de ejecución. Todo va en la carpeta `ffmpeg/` junto al ejecutable (Windows y Linux) |
+| **FFmpeg** 8.1.3 | **LGPL 2.1 o posterior** | Graba con el **ejecutable** `ffmpeg`, que JudoReplay lanza como proceso hijo, y reproduce con las **bibliotecas compartidas** (avcodec, avformat, avutil, swscale, swresample), cargadas en tiempo de ejecución. Todo va en la carpeta `ffmpeg/` junto al ejecutable |
+| dav1d 1.5.4 | BSD 2 cláusulas | Dentro de las bibliotecas de FFmpeg: decodifica AV1 en los equipos sin AV1 por hardware |
+| libvpl 2.16.0 | MIT | Dentro de las bibliotecas de FFmpeg (Windows y Linux): Intel QuickSync |
+| nv-codec-headers 12.1.14.1, cabeceras AMF 1.5.0 | MIT | Solo cabeceras, para compilar FFmpeg con NVENC y AMF; los controladores se cargan del sistema |
 
 ### FFmpeg
 
-- **Qué compilación:** la LGPL de BtbN, `FFmpeg-Builds`, fijada por nombre y suma SHA-256 en
-  [`Empaquetado/ffmpeg/version.env`](Empaquetado/ffmpeg/version.env). Origen de los binarios:
-  <https://github.com/BtbN/FFmpeg-Builds/releases>. Código fuente de FFmpeg: <https://ffmpeg.org/download.html>
-  y <https://git.ffmpeg.org/ffmpeg.git> (la versión exacta va en `ffmpeg -version`). Los guiones de
-  compilación de BtbN, para rehacerla: <https://github.com/BtbN/FFmpeg-Builds>.
-- **Su licencia** va dentro del paquete, en `ffmpeg/LICENSE.txt`.
-- **Se puede sustituir:** cualquiera puede poner otra compilación de FFmpeg 8.1 en esa carpeta (o señalarlas
-  con las variables de entorno `JUDO_FFMPEG` y `JUDO_FFMPEG_LIB`) sin tocar JudoReplay, que es lo que
-  pide la LGPL: el enlace con las bibliotecas es dinámico.
-- **No es GPL:** la compilación no incluye x264 ni x265. Trae algunos codificadores por software con
-  licencias permisivas (SVT-AV1, libaom, rav1e, kvazaar), que JudoReplay no usa: solo codifica por
-  hardware (Documentación/01-Plan.md, D2).
-- **macOS:** todavía sin FFmpeg dentro del `.dmg`, porque no hay compilación LGPL publicada para Mac.
-  Hasta compilar una propia, la aplicación usa el FFmpeg del sistema.
+- **Qué compilación:** una propia, la misma en Windows, macOS y Linux, hecha con
+  [`Empaquetado/ffmpeg/compilar.sh`](Empaquetado/ffmpeg/compilar.sh) a partir del código de FFmpeg
+  sin modificar: bibliotecas compartidas, **sin componentes GPL ni «nonfree»** y **sin codificadores
+  de vídeo por software** (solo los de hardware de cada sistema). Ver
+  [`Empaquetado/ffmpeg/LEEME.md`](Empaquetado/ffmpeg/LEEME.md).
+- **El código fuente**, con el guion que la compila y las sumas, está publicado junto a los binarios
+  en la release `ffmpeg-8.1.3-jr1` del repositorio público:
+  <https://github.com/JuSaFe/JudoReplay-Releases/releases/tag/ffmpeg-8.1.3-jr1>. También en
+  <https://ffmpeg.org/download.html>.
+- **Dentro del paquete:** `ffmpeg/LEEME.txt` (qué es y dónde está su código), las licencias
+  (`LICENCIA-*.txt`) y la orden `configure` exacta (`configuracion.txt`).
+- **Se puede sustituir:** cualquiera puede poner otra compilación de FFmpeg 8.1 en esa carpeta (o
+  señalarla con las variables de entorno `JUDO_FFMPEG` y `JUDO_FFMPEG_LIB`) sin tocar JudoReplay,
+  que es lo que pide la LGPL: el enlace con las bibliotecas es dinámico.
 - **Patentes:** H.265 está sujeto a patentes. La aplicación es gratuita y codifica con el hardware del
-  propio equipo, sin distribuir un codificador por software (Documentación/01-Plan.md, §4.2).
+  propio equipo, sin distribuir un codificador de vídeo por software (Documentación/01-Plan.md, §4.2).
 
 ## 3. Marcas y logotipos
 

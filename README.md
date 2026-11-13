@@ -53,6 +53,10 @@ red, con licencia de JudoReplay, y un usuario con rol `replay` (CARE) o `comisio
 Para grabar, el equipo del tatami necesita un **codificador de vídeo por hardware** H.265 o AV1
 (Intel 6.ª generación o posterior, NVIDIA, AMD o Mac). La propia aplicación lo comprueba.
 
+Los instaladores llevan **FFmpeg** (LGPL 2.1 o posterior), compilado sin codificadores de vídeo por
+software. Sus binarios y su código fuente, con el guion que lo compila, están en las releases
+`ffmpeg-*` de este repositorio (ver [TERCEROS.md](TERCEROS.md)).
+
 ## Soporte
 
 ¿Un fallo, una duda o una propuesta? Abre una
